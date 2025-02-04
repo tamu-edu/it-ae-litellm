@@ -804,6 +804,7 @@ def init_bedrock_client(
         endpoint_url = f"https://bedrock-runtime.{region_name}.amazonaws.com"
 
     import boto3
+    from botocore import UNSIGNED
 
     if isinstance(timeout, float):
         config = boto3.session.Config(connect_timeout=timeout, read_timeout=timeout)  # type: ignore
@@ -812,7 +813,7 @@ def init_bedrock_client(
             connect_timeout=timeout.connect, read_timeout=timeout.read
         )
     else:
-        config = boto3.session.Config()  # type: ignore
+        config = boto3.session.Config(signature_version=UNSIGNED)  # type: ignore AND Disable SigV4 signing
 
     ### CHECK STS ###
     if (
